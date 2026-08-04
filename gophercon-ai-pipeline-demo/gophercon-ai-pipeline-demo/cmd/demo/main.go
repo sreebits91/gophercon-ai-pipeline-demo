@@ -58,7 +58,7 @@ func main() {
 	err := p.Run(ctx, docs)
 	duration := time.Since(start)
 
-	fmt.Printf("\n")
+	fmt.Println("\n")
 	if err != nil {
 		slog.Error("❌ Pipeline error encountered", "err", err)
 		os.Exit(1)
