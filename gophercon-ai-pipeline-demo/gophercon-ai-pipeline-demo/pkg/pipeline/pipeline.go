@@ -54,7 +54,6 @@ func (p *Pipeline) Run(ctx context.Context, docs []Document) error {
 	chunkChan  := make(chan TextChunk, 500)
 	embedChan  := make(chan VectorEmbedding, 100)
 
-	// Stage 1: Ingestion
 	g.Go(func() error {
 		defer close(ingestChan)
 		for _, doc := range docs {
@@ -69,7 +68,6 @@ func (p *Pipeline) Run(ctx context.Context, docs []Document) error {
 		return nil
 	})
 
-	// Stage 2: Token Chunking
 	g.Go(func() error {
 		defer close(chunkChan)
 		for doc := range ingestChan {
@@ -84,7 +82,6 @@ func (p *Pipeline) Run(ctx context.Context, docs []Document) error {
 		return nil
 	})
 
-	// Stage 3: Embedding Worker Pool
 	g.Go(func() error {
 		defer close(embedChan)
 		workerGroup, workerCtx := errgroup.WithContext(ctx)
@@ -116,7 +113,6 @@ func (p *Pipeline) Run(ctx context.Context, docs []Document) error {
 		return workerGroup.Wait()
 	})
 
-	// Stage 4: Vector DB Indexing
 	g.Go(func() error {
 		for range embedChan {
 			atomic.AddUint64(&p.Metrics.Indexed, 1)
