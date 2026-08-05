@@ -1,0 +1,8 @@
+{
+  "dataset_name": "synthetic_embedding_benchmark",
+  "version": "1.0",
+  "generated_at": "2026-08-05T10:30:00Z",
+  "documents": 10000,
+  "average_sentences": 10,
+  "purpose": "AI embedding pipeline concurrency benchmark"
+}
