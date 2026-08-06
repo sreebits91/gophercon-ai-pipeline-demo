@@ -5,25 +5,29 @@ import (
 )
 
 type Result struct {
-	DocumentsProcessed int
+	Documents int `json:"documents"`
 
-	Successful int
+	Successful int `json:"successful"`
 
-	Failed int
+	Failed int `json:"failed"`
 
-	Duration time.Duration
+	Duration time.Duration `json:"duration"`
 
-	Throughput float64
+	Throughput float64 `json:"throughput"`
+
+	Runtime RuntimeStats `json:"runtime"`
 }
 
 type Tracker struct {
-	start time.Time
-
 	total int
 
-	success int
+	successful int
 
 	failed int
+
+	start time.Time
+
+	startRuntime RuntimeStats
 }
 
 func NewTracker(total int) *Tracker {
@@ -37,55 +41,58 @@ func (t *Tracker) Start() {
 
 	t.start = time.Now()
 
+	t.startRuntime = CaptureRuntimeStats()
 }
 
 func (t *Tracker) Success() {
 
-	t.success++
-
+	t.successful++
 }
 
 func (t *Tracker) Failure() {
 
 	t.failed++
-
 }
 
 func (t *Tracker) Finish() Result {
 
-	duration :=
-		time.Since(t.start)
+	duration := time.Since(t.start)
+
+	endRuntime := CaptureRuntimeStats()
+
+	var throughput float64
+
+	if duration.Seconds() > 0 {
+
+		throughput =
+			float64(t.successful) /
+				duration.Seconds()
+	}
 
 	return Result{
 
-		DocumentsProcessed: t.total,
+		Documents: t.total,
 
-		Successful: t.success,
+		Successful: t.successful,
 
 		Failed: t.failed,
 
 		Duration: duration,
 
-		Throughput: float64(t.success) /
-			duration.Seconds(),
-	}
-}
+		Throughput: throughput,
 
-func (r Result) ToReport(mode string, workers int) Report {
+		Runtime: RuntimeStats{
 
-	return Report{
-		Mode: mode,
+			Goroutines: endRuntime.Goroutines,
 
-		Workers: workers,
+			MemoryAllocated: endRuntime.MemoryAllocated -
+				t.startRuntime.MemoryAllocated,
 
-		DocumentsProcessed: r.DocumentsProcessed,
+			TotalAllocated: endRuntime.TotalAllocated -
+				t.startRuntime.TotalAllocated,
 
-		Successful: r.Successful,
-
-		Failed: r.Failed,
-
-		DurationSeconds: r.Duration.Seconds(),
-
-		Throughput: r.Throughput,
+			GCCycles: endRuntime.GCCycles -
+				t.startRuntime.GCCycles,
+		},
 	}
 }

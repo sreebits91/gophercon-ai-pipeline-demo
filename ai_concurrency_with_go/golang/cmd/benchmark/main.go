@@ -1,13 +1,13 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"time"
-	"context"
 
 	"ai_cuurency_with_go/internal/benchmark"
 	"ai_cuurency_with_go/internal/embedding"
@@ -37,10 +37,10 @@ func main() {
 	)
 
 	timeout := flag.Duration(
-	"timeout",
-	30*time.Second,
-	"benchmark timeout",
-)
+		"timeout",
+		30*time.Second,
+		"benchmark timeout",
+	)
 
 	channelSize := flag.Int(
 		"channel-size",
@@ -69,7 +69,7 @@ func main() {
 	simulator := embedding.NewSimulator(
 		embedding.Config{
 			Dimension:   768,
-			LatencyMs:   50,
+			LatencyMs:   1,
 			FailureRate: 0.01,
 			Seed:        42,
 		},
@@ -143,28 +143,28 @@ func main() {
 			*workers,
 		)
 
-		case "cancellation":
+	case "cancellation":
 
-	ctx, cancel := context.WithTimeout(
-		context.Background(),
-		*timeout,
-	)
+		ctx, cancel := context.WithTimeout(
+			context.Background(),
+			*timeout,
+		)
 
-	defer cancel()
+		defer cancel()
 
-	result := pipeline.RunCancellation(
-		ctx,
-		documents,
-		simulator,
-		pipeline.CancellationConfig{
-			Workers: *workers,
-		},
-	)
+		result := pipeline.RunCancellation(
+			ctx,
+			documents,
+			simulator,
+			pipeline.CancellationConfig{
+				Workers: *workers,
+			},
+		)
 
-	report = result.ToReport(
-		"cancellation",
-		*workers,
-	)
+		report = result.ToReport(
+			"cancellation",
+			*workers,
+		)
 
 	default:
 

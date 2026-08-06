@@ -17,7 +17,7 @@ func SaveReport(report metrics.Report) error {
 
 	filename :=
 		fmt.Sprintf(
-			"../../../benchmark_results/go/%s_%s_%d.json",
+			"../benchmark_results/go/%s_%s_%d.json",
 			timestamp,
 			report.Mode,
 			report.Workers,

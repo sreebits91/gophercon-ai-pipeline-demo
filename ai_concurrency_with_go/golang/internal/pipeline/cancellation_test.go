@@ -46,7 +46,7 @@ func TestCancellation(t *testing.T) {
 		},
 	)
 
-	if result.DocumentsProcessed > len(docs) {
+	if result.Documents > len(docs) {
 
 		t.Fatal("processed more documents than expected")
 	}
