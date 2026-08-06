@@ -1,0 +1,9 @@
+{
+  "mode": "fanout",
+  "workers": 8,
+  "documents_processed": 10000,
+  "successful": 9887,
+  "failed": 113,
+  "duration_seconds": 1.470065343,
+  "throughput_docs_per_sec": 6725.551382514294
+}

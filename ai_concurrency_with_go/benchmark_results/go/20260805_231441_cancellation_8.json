@@ -1,0 +1,9 @@
+{
+  "mode": "cancellation",
+  "workers": 8,
+  "documents_processed": 10000,
+  "successful": 9885,
+  "failed": 115,
+  "duration_seconds": 1.460501391,
+  "throughput_docs_per_sec": 6768.223612051322
+}

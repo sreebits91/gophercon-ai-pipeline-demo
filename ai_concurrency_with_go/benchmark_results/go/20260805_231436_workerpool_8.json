@@ -1,0 +1,9 @@
+{
+  "mode": "workerpool",
+  "workers": 8,
+  "documents_processed": 10000,
+  "successful": 9882,
+  "failed": 115,
+  "duration_seconds": 1.455362516,
+  "throughput_docs_per_sec": 6790.060820832628
+}

@@ -1,0 +1,9 @@
+{
+  "mode": "sequential",
+  "workers": 1,
+  "documents_processed": 10000,
+  "successful": 9885,
+  "failed": 115,
+  "duration_seconds": 11.082956157,
+  "throughput_docs_per_sec": 891.9100517921502
+}
